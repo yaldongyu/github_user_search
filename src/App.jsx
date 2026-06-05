@@ -1,37 +1,31 @@
-import { useState } from 'react'
+import { useEffect } from 'react'
 import axios from 'axios'
+import PubSub from 'pubsub-js'
 import Search from './components/Search'
 import List from './components/List'
 import './App.css'
 
 function App() {
-  const [users, setUsers] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-
-  const handleSearch = async (keyword) => {
-    setLoading(true)
-    setError('')
-    try {
-      const res = await axios.get('https://api.github.com/search/users', {
-        params: { q: keyword, per_page: 10 },
-      })
-      setUsers(res.data.items)
-    } catch (err) {
-      setError('请求失败，请稍后重试')
-      setUsers([])
-    } finally {
-      setLoading(false)
-    }
-  }
+  useEffect(() => {
+    const token = PubSub.subscribe('SEARCH', async (_, keyword) => {
+      PubSub.publish('SEARCH_RESULT', { users: [], loading: true, error: '' })
+      try {
+        const res = await axios.get('https://api.github.com/search/users', {
+          params: { q: keyword, per_page: 10 },
+        })
+        PubSub.publish('SEARCH_RESULT', { users: res.data.items, loading: false, error: '' })
+      } catch (err) {
+        PubSub.publish('SEARCH_RESULT', { users: [], loading: false, error: '请求失败，请稍后重试' })
+      }
+    })
+    return () => PubSub.unsubscribe(token)
+  }, [])
 
   return (
     <div className="app">
       <h1>GitHub 用户搜索</h1>
-      <Search onSearch={handleSearch} />
-      {loading && <p className="status-text">搜索中...</p>}
-      {error && <p className="status-text error">{error}</p>}
-      {!loading && !error && <List users={users} />}
+      <Search />
+      <List />
     </div>
   )
 }

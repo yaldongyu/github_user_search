@@ -1,12 +1,13 @@
 import { useState } from 'react'
+import PubSub from 'pubsub-js'
 
-export default function Search({ onSearch }) {
+export default function Search() {
   const [keyword, setKeyword] = useState('')
 
   const handleSubmit = (e) => {
     e.preventDefault()
     if (!keyword.trim()) return
-    onSearch(keyword.trim())
+    PubSub.publish('SEARCH', keyword.trim())
   }
 
   return (
@@ -15,7 +16,7 @@ export default function Search({ onSearch }) {
         className="search-input"
         type="text"
         value={keyword}
-        onChange={(e) => setKeyword(e.target.value)}
+        onChange={e => setKeyword(e.target.value)}
         placeholder="输入 GitHub 用户名搜索..."
       />
       <button className="search-btn" type="submit">

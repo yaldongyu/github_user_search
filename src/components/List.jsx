@@ -1,11 +1,31 @@
-export default function List({ users }) {
-  if (!users || users.length === 0) {
+import { useState, useEffect } from 'react'
+import PubSub from 'pubsub-js'
+
+export default function List() {
+  const [data, setData] = useState({ users: [], loading: false, error: '' })
+
+  useEffect(() => {
+    const token = PubSub.subscribe('SEARCH_RESULT', (_, payload) => {
+      setData(payload)
+    })
+    return () => PubSub.unsubscribe(token)
+  }, [])
+
+  if (data.loading) {
+    return <p className="status-text">搜索中...</p>
+  }
+
+  if (data.error) {
+    return <p className="status-text error">{data.error}</p>
+  }
+
+  if (!data.users || data.users.length === 0) {
     return <p className="list-empty">暂无数据，请搜索</p>
   }
 
   return (
     <ul className="user-list">
-      {users.map((user) => (
+      {data.users.map((user) => (
         <li key={user.id} className="user-card">
           <img
             className="user-avatar"
