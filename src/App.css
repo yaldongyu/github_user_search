@@ -1,0 +1,114 @@
+/* ===== App ===== */
+.app {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.app h1 {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+/* ===== Search ===== */
+.search-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.search-input {
+  flex: 1;
+  padding: 10px 14px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.search-input:focus {
+  border-color: #0969da;
+}
+
+.search-btn {
+  padding: 10px 24px;
+  font-size: 16px;
+  color: #fff;
+  background: #0969da;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.search-btn:hover {
+  background: #0756b3;
+}
+
+/* ===== Status ===== */
+.status-text {
+  text-align: center;
+  color: #666;
+}
+
+.status-text.error {
+  color: #cf222e;
+}
+
+/* ===== List ===== */
+.list-empty {
+  text-align: center;
+  color: #999;
+  margin-top: 40px;
+}
+
+.user-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.user-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid #e5e4e7;
+  border-radius: 8px;
+  transition: box-shadow 0.2s;
+}
+
+.user-card:hover {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.user-avatar {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.user-login {
+  font-size: 18px;
+  font-weight: 600;
+  color: #24292f;
+}
+
+.user-link {
+  font-size: 14px;
+  color: #0969da;
+  text-decoration: none;
+}
+
+.user-link:hover {
+  text-decoration: underline;
+}
