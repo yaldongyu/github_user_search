@@ -1,13 +1,20 @@
 import { useState } from 'react'
 import PubSub from 'pubsub-js'
+import { searchUsers } from '../api/github'
 
 export default function Search() {
   const [keyword, setKeyword] = useState('')
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     if (!keyword.trim()) return
-    PubSub.publish('SEARCH', keyword.trim())
+    PubSub.publish('SEARCH_RESULT', { users: [], loading: true, error: '' })
+    try {
+      const users = await searchUsers(keyword.trim())
+      PubSub.publish('SEARCH_RESULT', { users, loading: false, error: '' })
+    } catch (err) {
+      PubSub.publish('SEARCH_RESULT', { users: [], loading: false, error: '请求失败，请稍后重试' })
+    }
   }
 
   return (
